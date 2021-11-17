@@ -10,8 +10,13 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ConfigurationManager implements IConfigurationManager {
+    public static final Pattern VALID_EMAIL_ADDRESS_REGEX =
+            Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
+    
     private String smtpServerAddress;
     private int smtpServerPort;
     private int numberOfGroups;
@@ -24,16 +29,7 @@ public class ConfigurationManager implements IConfigurationManager {
         victims = loadVictims("./config/victims.utf8");
         messages = loadMessages("./config/messages.utf8");
         loadProperties("./config/config.properties");
-        
-        // Vérifications
-        if (victims.size() < numberOfGroups * 3) {
-            throw new RuntimeException("The number of groups is too big compared " +
-                    "to the number of victims.");
-        }
-        
-        if (messages.size() == 0) {
-            throw new RuntimeException("You need to add messages to your config.");
-        }
+        verifyConfig();
     }
     
     public ArrayList<Person> loadVictims(String filename) throws IOException {
@@ -91,6 +87,34 @@ public class ConfigurationManager implements IConfigurationManager {
             smtpServerPort = Integer.parseInt(prop.getProperty("smtpServerPort"));
             numberOfGroups = Integer.parseInt(prop.getProperty("numberOfGroups"));
             witnessesToCC = new Person(prop.getProperty("witnessesToCC"));
+        }
+    }
+    
+    public static boolean isEmailValid(String email) {
+        Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(email);
+        return matcher.find();
+    }
+    
+    public void verifyConfig() {
+        if (victims.size() < numberOfGroups * 3) {
+            throw new RuntimeException("The number of groups is too big compared " +
+                    "to the number of victims.");
+        }
+        
+        if (messages.size() == 0) {
+            throw new RuntimeException("You need to add messages to your config.");
+        }
+        
+        if (!isEmailValid(witnessesToCC.getMailAdress())) {
+            throw new RuntimeException("witnessesTo email <" +
+                    witnessesToCC.getMailAdress() + "> is invalid.");
+        }
+        
+        for (Person v : victims) {
+            if (!isEmailValid(v.getMailAdress())) {
+                throw new RuntimeException("Victim email <" +
+                        v.getMailAdress() + "> is invalid.");
+            }
         }
     }
     
