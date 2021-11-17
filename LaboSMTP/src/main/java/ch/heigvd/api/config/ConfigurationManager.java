@@ -20,10 +20,20 @@ public class ConfigurationManager implements IConfigurationManager {
     private final ArrayList<Person> victims;
     private final ArrayList<Message> messages;
     
-    public ConfigurationManager() throws IOException {
+    public ConfigurationManager() throws Exception {
         victims = loadVictims("./config/victims.utf8");
         messages = loadMessages("./config/messages.utf8");
         loadProperties("./config/config.properties");
+        
+        // Vérifications
+        if (victims.size() < numberOfGroups * 3) {
+            throw new RuntimeException("The number of groups is too big compared " +
+                    "to the number of victims.");
+        }
+        
+        if (messages.size() == 0) {
+            throw new RuntimeException("You need to add messages to your config.");
+        }
     }
     
     public ArrayList<Person> loadVictims(String filename) throws IOException {

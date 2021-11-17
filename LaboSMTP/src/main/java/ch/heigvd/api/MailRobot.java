@@ -12,7 +12,7 @@ public class MailRobot {
         try {
             ConfigurationManager config = new ConfigurationManager();
             System.out.println("ICI");
-        } catch (IOException e) {
+        } catch (Exception e) {
             System.out.println(e);
         }
         
