@@ -15,7 +15,7 @@ public class ConfigurationManager implements IConfigurationManager {
     private String smtpServerAddress;
     private int smtpServerPort;
     private int numberOfGroups;
-    private String witnessesToCC;
+    private Person witnessesToCC;
     
     private final ArrayList<Person> victims;
     private final ArrayList<Message> messages;
@@ -90,7 +90,7 @@ public class ConfigurationManager implements IConfigurationManager {
             smtpServerAddress = prop.getProperty("smtpServerAddress");
             smtpServerPort = Integer.parseInt(prop.getProperty("smtpServerPort"));
             numberOfGroups = Integer.parseInt(prop.getProperty("numberOfGroups"));
-            witnessesToCC = prop.getProperty("witnessesToCC");
+            witnessesToCC = new Person(prop.getProperty("witnessesToCC"));
         }
     }
     
@@ -106,7 +106,7 @@ public class ConfigurationManager implements IConfigurationManager {
         return numberOfGroups;
     }
     
-    public String getWitnessesToCC() {
+    public Person getWitnessesToCC() {
         return witnessesToCC;
     }
     
