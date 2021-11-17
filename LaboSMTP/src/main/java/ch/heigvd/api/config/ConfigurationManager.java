@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Properties;
 
 public class ConfigurationManager implements IConfigurationManager {
     private String smtpServerAddress;
@@ -51,7 +52,7 @@ public class ConfigurationManager implements IConfigurationManager {
             StringBuilder content = new StringBuilder();
             while ((line = reader.readLine()) != null) {
                 if (line.startsWith("Subject:")) {
-                    subject = line.replaceFirst("Subject:", "");
+                    subject = line.replaceFirst("Subject: ", "");
                 } else if (line.equals("")) {
                     continue;
                 } else if (line.equals("==")) {
@@ -61,13 +62,26 @@ public class ConfigurationManager implements IConfigurationManager {
                     content.append(line).append("\n");
                 }
             }
-            
+            // Création du dernier message
+            result.add(new Message(subject, content.toString()));
         }
         return result;
     }
     
     public void loadProperties(String filename) throws IOException {
-    
+        try (BufferedReader reader =
+                     new BufferedReader(
+                             new InputStreamReader(
+                                     new FileInputStream(filename), StandardCharsets.UTF_8))) {
+            
+            Properties prop = new Properties();
+            prop.load(reader);
+            
+            smtpServerAddress = prop.getProperty("smtpServerAddress");
+            smtpServerPort = Integer.parseInt(prop.getProperty("smtpServerPort"));
+            numberOfGroups = Integer.parseInt(prop.getProperty("numberOfGroups"));
+            witnessesToCC = prop.getProperty("witnessesToCC");
+        }
     }
     
     public String getSmtpServerAddress() {
