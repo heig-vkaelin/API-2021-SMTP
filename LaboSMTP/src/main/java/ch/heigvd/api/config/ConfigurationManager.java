@@ -51,11 +51,12 @@ public class ConfigurationManager implements IConfigurationManager {
             StringBuilder content = new StringBuilder();
             while ((line = reader.readLine()) != null) {
                 if (line.startsWith("Subject:")) {
-                    subject = line;
+                    subject = line.replaceFirst("Subject:", "");
                 } else if (line.equals("")) {
                     continue;
                 } else if (line.equals("==")) {
                     result.add(new Message(subject, content.toString()));
+                    content = new StringBuilder();
                 } else { // Du contenu
                     content.append(line).append("\n");
                 }
@@ -67,5 +68,29 @@ public class ConfigurationManager implements IConfigurationManager {
     
     public void loadProperties(String filename) throws IOException {
     
+    }
+    
+    public String getSmtpServerAddress() {
+        return smtpServerAddress;
+    }
+    
+    public int getSmtpServerPort() {
+        return smtpServerPort;
+    }
+    
+    public int getNumberOfGroups() {
+        return numberOfGroups;
+    }
+    
+    public String getWitnessesToCC() {
+        return witnessesToCC;
+    }
+    
+    public ArrayList<Person> getVictims() {
+        return victims;
+    }
+    
+    public ArrayList<Message> getMessages() {
+        return messages;
     }
 }
