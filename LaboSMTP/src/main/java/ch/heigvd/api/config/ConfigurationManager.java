@@ -1,5 +1,71 @@
 package ch.heigvd.api.config;
 
-public class ConfigurationManager implements IConfigurationManager {
+import ch.heigvd.api.model.mail.Message;
+import ch.heigvd.api.model.mail.Person;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+
+public class ConfigurationManager implements IConfigurationManager {
+    private String smtpServerAddress;
+    private int smtpServerPort;
+    private int numberOfGroups;
+    private String witnessesToCC;
+    
+    private final ArrayList<Person> victims;
+    private final ArrayList<Message> messages;
+    
+    public ConfigurationManager() throws IOException {
+        victims = loadVictims("./config/victims.utf8");
+        messages = loadMessages("./config/messages.utf8");
+        loadProperties("./config/config.properties");
+    }
+    
+    public ArrayList<Person> loadVictims(String filename) throws IOException {
+        ArrayList<Person> result = new ArrayList<>();
+        try (BufferedReader reader =
+                     new BufferedReader(
+                             new InputStreamReader(
+                                     new FileInputStream(filename), StandardCharsets.UTF_8))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                result.add(new Person(line));
+            }
+            
+        }
+        return result;
+    }
+    
+    public ArrayList<Message> loadMessages(String filename) throws IOException {
+        ArrayList<Message> result = new ArrayList<>();
+        try (BufferedReader reader =
+                     new BufferedReader(
+                             new InputStreamReader(
+                                     new FileInputStream(filename), StandardCharsets.UTF_8))) {
+            String line;
+            String subject = null;
+            StringBuilder content = new StringBuilder();
+            while ((line = reader.readLine()) != null) {
+                if (line.startsWith("Subject:")) {
+                    subject = line;
+                } else if (line.equals("")) {
+                    continue;
+                } else if (line.equals("==")) {
+                    result.add(new Message(subject, content.toString()));
+                } else { // Du contenu
+                    content.append(line).append("\n");
+                }
+            }
+            
+        }
+        return result;
+    }
+    
+    public void loadProperties(String filename) throws IOException {
+    
+    }
 }
