@@ -1,11 +1,19 @@
 package ch.heigvd.api.model.prank;
 
 import ch.heigvd.api.model.mail.Group;
+import ch.heigvd.api.model.mail.Message;
+import ch.heigvd.api.model.mail.Person;
+
+import java.util.ArrayList;
 
 public class Prank {
-    public Group victims;
+    private Person sender;
+    private ArrayList<Person> people;
+    private Message message;
     
-    public Prank(Group victims) {
-        this.victims = victims;
+    public void prank(){
+    
     }
+    
+    
 }

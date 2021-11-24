@@ -1,11 +1,15 @@
 package ch.heigvd.api.model.mail;
 
+import java.util.ArrayList;
+
 public class Group {
-    public Person sender;
-    public Person[] receivers;
+    private ArrayList<Person> members;
     
-    public Group(Person sender, Person[] receivers) {
-        this.sender = sender;
-        this.receivers = receivers;
+    public Group(ArrayList<Person> members) {
+        this.members = members;
+    }
+    
+    public ArrayList<Person> getMembers() {
+        return members;
     }
 }
