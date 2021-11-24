@@ -4,7 +4,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class Group {
-    private ArrayList<Person> members;
+    private final ArrayList<Person> members;
+    
+    public Group() {
+        this(new ArrayList<>());
+    }
     
     public Group(ArrayList<Person> members) {
         this.members = members;
@@ -14,7 +18,11 @@ public class Group {
         return members;
     }
     
-    public void shuffleMembers(){
+    public void addMember(Person member) {
+        members.add(member);
+    }
+    
+    public void shuffleMembers() {
         Collections.shuffle(members);
     }
 }

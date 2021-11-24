@@ -2,9 +2,7 @@ package ch.heigvd.api.model.prank;
 
 import ch.heigvd.api.model.mail.Message;
 import ch.heigvd.api.model.mail.Person;
-import ch.heigvd.api.smtp.SmtpClient;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class Prank {
@@ -13,17 +11,21 @@ public class Prank {
     private ArrayList<Person> people;
     private Message message;
     
-    public Prank(Person sender,ArrayList<Person> people, Message message, Person bcc){
+    // 1er personne de la liste people: le sender
+    public Prank(ArrayList<Person> people, Message message, Person bcc) {
         this.message = message;
-        this.people = people;
-        this.sender = sender;
+        this.people = new ArrayList<>();
+        for (int i = 1; i < people.size(); i++) {
+            this.people.add(people.get(i));
+        }
+        this.sender = people.get(0);
         this.bcc = bcc;
         updateMessage();
     }
     
-    private void updateMessage(){
+    private void updateMessage() {
         ArrayList<String> mails = new ArrayList<>();
-        for (Person person : people){
+        for (Person person : people) {
             mails.add(person.getMailAdress());
         }
         message.setFrom(sender.getMailAdress());
@@ -31,9 +33,8 @@ public class Prank {
         message.setBcc(bcc.getMailAdress());
     }
     
-    public void sendPrank() throws IOException {
-        SmtpClient client = new SmtpClient();
-        client.sendMessage(message);
+    public Message getMessage() {
+        return message;
     }
     
     

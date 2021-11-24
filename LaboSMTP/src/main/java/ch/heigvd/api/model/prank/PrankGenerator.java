@@ -4,6 +4,7 @@ import ch.heigvd.api.config.ConfigurationManager;
 import ch.heigvd.api.model.mail.Group;
 import ch.heigvd.api.model.mail.Message;
 import ch.heigvd.api.model.mail.Person;
+import ch.heigvd.api.smtp.SmtpClient;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -14,47 +15,50 @@ public class PrankGenerator {
     ConfigurationManager cm;
     
     public PrankGenerator() {
-        try{
+        try {
             cm = new ConfigurationManager();
-        } catch (Exception e){
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
         createPrank();
     }
     
-    private ArrayList<Group> createGroups(){
-        ArrayList<Group> groups =  new ArrayList<>();
-        int groupSize = cm.getVictims().size() / cm.getNumberOfGroups();
-        for (int i = 0; i < cm.getNumberOfGroups() ;++i){
-            Group group;
-            if(i != cm.getNumberOfGroups()-1){
-                group = new Group((ArrayList<Person>) cm.getVictims().subList((i*groupSize),
-                        ((i*groupSize)+groupSize)));
-            } else{
-                group = new Group((ArrayList<Person>) cm.getVictims().subList((i*groupSize)
-                        , cm.getVictims().size()));
-            }
-            groups.add(group);
+    private ArrayList<Group> createGroups() {
+        ArrayList<Group> groups = new ArrayList<>();
+        ArrayList<Person> remaningVictims = new ArrayList<>(cm.getVictims());
+        
+        for (int i = 0; i < cm.getNumberOfGroups(); i++) {
+            groups.add(new Group());
         }
+        
+        int turn = 0;
+        while (remaningVictims.size() > 0) {
+            int lastIndex = remaningVictims.size() - 1;
+            groups.get(turn).addMember(remaningVictims.get(lastIndex));
+            remaningVictims.remove(lastIndex);
+            turn = (turn + 1) % groups.size();
+        }
+        
         return groups;
     }
     
-    public void createPrank(){
+    public void createPrank() {
         ArrayList<Group> groups = createGroups();
         Collections.shuffle(groups);
         ArrayList<Message> messages = cm.getMessages();
         Random random = new Random();
-        for (Group group : groups){
+        for (Group group : groups) {
             group.shuffleMembers();
-            Prank prank = new Prank(group.getMembers().get(0),
-                    (ArrayList<Person>) group.getMembers().subList(1,group.getMembers().size()),
-                    messages.get(random.nextInt(messages.size())),cm.getWitnessesToCC());
-            try{
-                prank.sendPrank();
-            } catch (IOException e){
+            Prank prank = new Prank(
+                    group.getMembers(),
+                    messages.get(random.nextInt(messages.size())), cm.getWitnessesToCC());
+            try {
+                SmtpClient client = new SmtpClient(cm.getSmtpServerAddress(), cm.getSmtpServerPort());
+                client.sendMessage(prank.getMessage());
+            } catch (IOException e) {
                 System.out.println("Erreur lors de l'envoi d'un prank");
             }
         }
-    
+        
     }
 }
