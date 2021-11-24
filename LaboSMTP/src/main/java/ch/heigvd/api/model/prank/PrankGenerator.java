@@ -12,7 +12,8 @@ import java.util.Collections;
 import java.util.Random;
 
 public class PrankGenerator {
-    ConfigurationManager cm;
+    private ConfigurationManager cm;
+    static private final Random random = new Random();
     
     public PrankGenerator() {
         try {
@@ -20,7 +21,7 @@ public class PrankGenerator {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        createPrank();
+        createPranks();
     }
     
     private ArrayList<Group> createGroups() {
@@ -42,11 +43,10 @@ public class PrankGenerator {
         return groups;
     }
     
-    public void createPrank() {
+    public void createPranks() {
         ArrayList<Group> groups = createGroups();
         Collections.shuffle(groups);
         ArrayList<Message> messages = cm.getMessages();
-        Random random = new Random();
         for (Group group : groups) {
             group.shuffleMembers();
             Prank prank = new Prank(
