@@ -4,45 +4,39 @@ import ch.heigvd.api.config.ConfigurationManager;
 import ch.heigvd.api.model.mail.Group;
 import ch.heigvd.api.model.mail.Message;
 import ch.heigvd.api.model.mail.Person;
-import ch.heigvd.api.smtp.SmtpClient;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
 public class PrankGenerator {
-    private ConfigurationManager cm;
+    private final ConfigurationManager cm;
     static private final Random random = new Random();
     
-    public PrankGenerator() {
-        try {
-            cm = new ConfigurationManager();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
+    public PrankGenerator(ConfigurationManager cm) {
+        this.cm = cm;
     }
     
     private ArrayList<Group> createGroups() {
         ArrayList<Group> groups = new ArrayList<>();
-        ArrayList<Person> remaningVictims = new ArrayList<>(cm.getVictims());
+        ArrayList<Person> remainingVictims = new ArrayList<>(cm.getVictims());
         
         for (int i = 0; i < cm.getNumberOfGroups(); i++) {
             groups.add(new Group());
         }
         
         int turn = 0;
-        while (remaningVictims.size() > 0) {
-            int lastIndex = remaningVictims.size() - 1;
-            groups.get(turn).addMember(remaningVictims.get(lastIndex));
-            remaningVictims.remove(lastIndex);
+        while (remainingVictims.size() > 0) {
+            int lastIndex = remainingVictims.size() - 1;
+            groups.get(turn).addMember(remainingVictims.get(lastIndex));
+            remainingVictims.remove(lastIndex);
             turn = (turn + 1) % groups.size();
         }
-        
         return groups;
     }
     
-    public void generatePranks() throws IOException {
+    public ArrayList<Prank> generatePranks() {
+        ArrayList<Prank> pranks = new ArrayList<>();
         ArrayList<Group> groups = createGroups();
         Collections.shuffle(groups);
         ArrayList<Message> messages = cm.getMessages();
@@ -52,9 +46,8 @@ public class PrankGenerator {
                     group.getMembers(),
                     messages.get(random.nextInt(messages.size())),
                     cm.getWitnessesToCC());
-            
-            SmtpClient client = new SmtpClient(cm.getSmtpServerAddress(), cm.getSmtpServerPort());
-            client.sendMessage(prank.getMessage());
+            pranks.add(prank);
         }
+        return pranks;
     }
 }
