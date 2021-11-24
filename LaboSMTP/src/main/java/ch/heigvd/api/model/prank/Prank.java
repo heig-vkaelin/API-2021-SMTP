@@ -1,41 +1,37 @@
 package ch.heigvd.api.model.prank;
 
+import ch.heigvd.api.model.mail.Mail;
 import ch.heigvd.api.model.mail.Message;
 import ch.heigvd.api.model.mail.Person;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class Prank {
-    private Person sender;
-    private Person bcc;
-    private ArrayList<Person> people;
-    private Message message;
+    private final Person sender;
+    private final List<Person> people;
+    private final Person copy;
+    private final Message message;
     
-    // 1er personne de la liste people: le sender
-    public Prank(ArrayList<Person> people, Message message, Person bcc) {
+    public Prank(List<Person> people, Message message, Person bcc) {
         this.message = message;
+        // 1er personne de la liste people: le sender
+        this.sender = people.get(0);
         this.people = new ArrayList<>();
         for (int i = 1; i < people.size(); i++) {
             this.people.add(people.get(i));
         }
-        this.sender = people.get(0);
-        this.bcc = bcc;
-        updateMessage();
+        this.copy = bcc;
     }
     
-    private void updateMessage() {
-        ArrayList<String> mails = new ArrayList<>();
-        for (Person person : people) {
-            mails.add(person.getMailAdress());
-        }
-        message.setFrom(sender.getMailAdress());
-        message.setTo(mails);
-        message.setBcc(bcc.getMailAdress());
+    public Mail generateMail() {
+        Mail mail = new Mail(message.getSubject(), message.getContent());
+        
+        mail.setBcc(copy.getMailAddress());
+        mail.setFrom(sender.getMailAddress());
+        mail.setTo(people.stream().map(Person::getMailAddress).collect(Collectors.toList()));
+        
+        return mail;
     }
-    
-    public Message getMessage() {
-        return message;
-    }
-    
-    
 }

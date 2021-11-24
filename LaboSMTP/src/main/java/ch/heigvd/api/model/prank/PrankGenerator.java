@@ -11,7 +11,7 @@ import java.util.Random;
 
 public class PrankGenerator {
     private final ConfigurationManager cm;
-    static private final Random random = new Random();
+    private static final Random random = new Random();
     
     public PrankGenerator(ConfigurationManager cm) {
         this.cm = cm;
@@ -20,6 +20,7 @@ public class PrankGenerator {
     private ArrayList<Group> createGroups() {
         ArrayList<Group> groups = new ArrayList<>();
         ArrayList<Person> remainingVictims = new ArrayList<>(cm.getVictims());
+        Collections.shuffle(remainingVictims);
         
         for (int i = 0; i < cm.getNumberOfGroups(); i++) {
             groups.add(new Group());
@@ -38,8 +39,8 @@ public class PrankGenerator {
     public ArrayList<Prank> generatePranks() {
         ArrayList<Prank> pranks = new ArrayList<>();
         ArrayList<Group> groups = createGroups();
-        Collections.shuffle(groups);
         ArrayList<Message> messages = cm.getMessages();
+        
         for (Group group : groups) {
             group.shuffleMembers();
             Prank prank = new Prank(

@@ -2,19 +2,20 @@ package ch.heigvd.api.model.mail;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 public class Group {
-    private final ArrayList<Person> members;
+    private final List<Person> members;
     
     public Group() {
         this(new ArrayList<>());
     }
     
-    public Group(ArrayList<Person> members) {
+    public Group(List<Person> members) {
         this.members = members;
     }
     
-    public ArrayList<Person> getMembers() {
+    public List<Person> getMembers() {
         return members;
     }
     

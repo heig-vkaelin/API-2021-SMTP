@@ -12,13 +12,14 @@ public class MailRobot {
     private static final Logger LOG = Logger.getLogger(SmtpClient.class.getName());
     
     public static void main(String[] args) {
+        System.setProperty("java.util.logging.SimpleFormatter.format", "%4$s: %5$s%6$s%n");
         // Parsing config
         ConfigurationManager cm;
         try {
             cm = new ConfigurationManager();
         } catch (Exception e) {
-            LOG.info("Error while parsing configuration:");
-            LOG.info(e.getMessage());
+            LOG.severe("Error while parsing configuration:");
+            LOG.severe(e.getMessage());
             return;
         }
         
@@ -30,12 +31,12 @@ public class MailRobot {
         // Send pranks
         try {
             for (Prank p : pranks) {
-                client.sendMessage(p.getMessage());
+                client.sendMail(p.generateMail());
             }
-            System.out.println("Program ended.");
+            LOG.info("Program finished.");
         } catch (Exception e) {
-            LOG.info("Error while sending pranks:");
-            LOG.info(e.getMessage());
+            LOG.severe("Error while sending pranks:");
+            LOG.severe(e.getMessage());
         }
     }
 }

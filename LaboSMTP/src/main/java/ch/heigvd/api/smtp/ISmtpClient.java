@@ -1,9 +1,9 @@
 package ch.heigvd.api.smtp;
 
-import ch.heigvd.api.model.mail.Message;
+import ch.heigvd.api.model.mail.Mail;
 
 import java.io.IOException;
 
 public interface ISmtpClient {
-    public void sendMessage(Message message) throws IOException;
+    void sendMail(Mail mail) throws IOException;
 }

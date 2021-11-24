@@ -1,10 +1,12 @@
 package ch.heigvd.api.smtp;
 
+import ch.heigvd.api.model.mail.Mail;
 import ch.heigvd.api.model.mail.Message;
 
 import java.io.*;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.logging.Logger;
 
 public class SmtpClient implements ISmtpClient {
@@ -14,7 +16,6 @@ public class SmtpClient implements ISmtpClient {
     private final String smtpServerAddress;
     private final int smtpServerPort;
     
-    private Socket socket;
     private PrintWriter writer;
     private BufferedReader reader;
     
@@ -31,19 +32,15 @@ public class SmtpClient implements ISmtpClient {
         LOG.info(line);
     }
     
-    private void sendLine(String line) {
+    private void sendLineVerified(String line) throws IOException {
         writer.write(line + EOL);
         writer.flush();
-    }
-    
-    private void sendLineVerified(String line) throws IOException {
-        sendLine(line);
         checkSmtpServerResponse();
     }
     
     @Override
-    public void sendMessage(Message message) throws IOException {
-        LOG.info("Send message with SMTP protocol.");
+    public void sendMail(Mail mail) throws IOException {
+        LOG.info("Send mail with SMTP protocol.");
         Socket socket = new Socket(smtpServerAddress, smtpServerPort);
         writer = new PrintWriter(
                 new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8), true);
@@ -59,44 +56,46 @@ public class SmtpClient implements ISmtpClient {
         }
         
         // FROM
-        sendLineVerified("MAIL FROM:" + message.getFrom());
+        sendLineVerified("MAIL FROM:" + mail.getFrom());
         
         // TO
-        for (String to : message.getTo()) {
+        for (String to : mail.getTo()) {
             sendLineVerified("RCPT TO:" + to);
         }
         
         // BCC
-        for (String to : message.getTo()) {
+        for (String to : mail.getTo()) {
             sendLineVerified("RCPT TO:" + to);
         }
         
-        // CONTENT
-        sendLine("DATA");
+        // DATA
+        sendLineVerified("DATA");
+        writer.write("Content-Type: text/plain; charset=utf-8" + EOL);
+        writer.write("From: " + mail.getFrom() + EOL);
         
-        line = reader.readLine();
-        LOG.info(line);
-        writer.write("Content-type: text/plain; charset=utf-8" + EOL);
-        writer.write("From: " + message.getFrom() + EOL);
-        
-        writer.write("To: " + message.getTo().get(0));
-        for (int i = 1; i < message.getTo().size(); ++i) {
-            writer.write(", " + message.getTo().get(i));
+        writer.write("To: " + mail.getTo().get(0));
+        for (int i = 1; i < mail.getTo().size(); ++i) {
+            writer.write(", " + mail.getTo().get(i));
         }
         writer.write(EOL);
+        writer.write("Bcc: " + mail.getBcc() + EOL);
+        writer.write("Subject: =?utf-8?B?"
+                + Base64.getEncoder().encodeToString(mail.getSubject().getBytes())
+                + "?=" + EOL);
+        writer.write("Subject: " + mail.getSubject() + EOL);
         
-        sendLine("Bcc: " + message.getBcc());
+        // Content
+        writer.write(EOL);
+        writer.flush();
+        writer.write(mail.getContent() + EOL);
+        sendLineVerified(".");
         
-        writer.write("Subject: " + message.getSubject() + EOL);
-        sendLine("");
-        writer.write(message.getContent() + EOL);
-        sendLine(".");
-        
-        line = reader.readLine();
-        LOG.info(line);
-        sendLine("QUIT");
+        // QUIT
+        writer.write("QUIT" + EOL);
+        writer.flush();
         reader.close();
         writer.close();
-        LOG.info("Mail delivered.");
+        socket.close();
+        LOG.info("Mail delivered.\n");
     }
 }

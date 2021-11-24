@@ -1,12 +1,13 @@
 package ch.heigvd.api.model.mail;
 
 public class Person {
-    private String mailAdress;
+    private final String mailAddress;
     
-    public String getMailAdress() {
-        return mailAdress;
+    public String getMailAddress() {
+        return mailAddress;
     }
-    public Person(String mailAdress) {
-        this.mailAdress = mailAdress;
+    
+    public Person(String mailAddress) {
+        this.mailAddress = mailAddress;
     }
 }

@@ -106,15 +106,15 @@ public class ConfigurationManager implements IConfigurationManager {
             throw new RuntimeException("You need to add messages to your config.");
         }
         
-        if (!isEmailValid(witnessesToCC.getMailAdress())) {
+        if (!isEmailValid(witnessesToCC.getMailAddress())) {
             throw new RuntimeException("witnessesTo email <" +
-                    witnessesToCC.getMailAdress() + "> is invalid.");
+                    witnessesToCC.getMailAddress() + "> is invalid.");
         }
         
         for (Person v : victims) {
-            if (!isEmailValid(v.getMailAdress())) {
+            if (!isEmailValid(v.getMailAddress())) {
                 throw new RuntimeException("Victim email <" +
-                        v.getMailAdress() + "> is invalid.");
+                        v.getMailAddress() + "> is invalid.");
             }
         }
     }
