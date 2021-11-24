@@ -76,7 +76,7 @@ public class SmtpClient implements ISmtpClient {
         
         line = reader.readLine();
         LOG.info(line);
-        writer.write("Content-type: text/plain; charset=\"utf-8\"\r\n");
+        writer.write("Content-type: text/plain; charset=utf-8" + EOL);
         writer.write("From: " + message.getFrom() + EOL);
         
         writer.write("To: " + message.getTo().get(0));

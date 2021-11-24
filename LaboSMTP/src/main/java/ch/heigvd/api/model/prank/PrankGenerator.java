@@ -21,7 +21,6 @@ public class PrankGenerator {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        createPranks();
     }
     
     private ArrayList<Group> createGroups() {
@@ -43,7 +42,7 @@ public class PrankGenerator {
         return groups;
     }
     
-    public void createPranks() {
+    public void generatePranks() throws IOException {
         ArrayList<Group> groups = createGroups();
         Collections.shuffle(groups);
         ArrayList<Message> messages = cm.getMessages();
@@ -51,14 +50,11 @@ public class PrankGenerator {
             group.shuffleMembers();
             Prank prank = new Prank(
                     group.getMembers(),
-                    messages.get(random.nextInt(messages.size())), cm.getWitnessesToCC());
-            try {
-                SmtpClient client = new SmtpClient(cm.getSmtpServerAddress(), cm.getSmtpServerPort());
-                client.sendMessage(prank.getMessage());
-            } catch (IOException e) {
-                System.out.println("Erreur lors de l'envoi d'un prank");
-            }
+                    messages.get(random.nextInt(messages.size())),
+                    cm.getWitnessesToCC());
+            
+            SmtpClient client = new SmtpClient(cm.getSmtpServerAddress(), cm.getSmtpServerPort());
+            client.sendMessage(prank.getMessage());
         }
-        
     }
 }
