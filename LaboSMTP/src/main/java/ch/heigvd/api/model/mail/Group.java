@@ -1,6 +1,7 @@
 package ch.heigvd.api.model.mail;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class Group {
     private ArrayList<Person> members;
@@ -11,5 +12,9 @@ public class Group {
     
     public ArrayList<Person> getMembers() {
         return members;
+    }
+    
+    public void shuffleMembers(){
+        Collections.shuffle(members);
     }
 }

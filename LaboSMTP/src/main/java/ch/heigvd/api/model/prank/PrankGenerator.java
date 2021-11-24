@@ -7,6 +7,8 @@ import ch.heigvd.api.model.mail.Person;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Random;
 
 public class PrankGenerator {
     ConfigurationManager cm;
@@ -39,8 +41,19 @@ public class PrankGenerator {
     
     public void createPrank(){
         ArrayList<Group> groups = createGroups();
+        Collections.shuffle(groups);
+        ArrayList<Message> messages = cm.getMessages();
+        Random random = new Random();
         for (Group group : groups){
-            Prank prank = new Prank();
+            group.shuffleMembers();
+            Prank prank = new Prank(group.getMembers().get(0),
+                    (ArrayList<Person>) group.getMembers().subList(1,group.getMembers().size()),
+                    messages.get(random.nextInt(messages.size())),cm.getWitnessesToCC());
+            try{
+                prank.sendPrank();
+            } catch (IOException e){
+                System.out.println("Erreur lors de l'envoi d'un prank");
+            }
         }
     
     }
