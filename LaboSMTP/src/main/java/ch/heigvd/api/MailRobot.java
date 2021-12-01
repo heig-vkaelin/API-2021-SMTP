@@ -5,7 +5,7 @@ import ch.heigvd.api.model.prank.Prank;
 import ch.heigvd.api.model.prank.PrankGenerator;
 import ch.heigvd.api.smtp.SmtpClient;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 public class MailRobot {
@@ -26,7 +26,7 @@ public class MailRobot {
         // Generate pranks
         SmtpClient client = new SmtpClient(cm.getSmtpServerAddress(), cm.getSmtpServerPort());
         PrankGenerator generator = new PrankGenerator(cm);
-        ArrayList<Prank> pranks = generator.generatePranks();
+        List<Prank> pranks = generator.generatePranks();
         
         // Send pranks
         try {

@@ -7,6 +7,7 @@ import ch.heigvd.api.model.mail.Person;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 
 public class PrankGenerator {
@@ -17,9 +18,9 @@ public class PrankGenerator {
         this.cm = cm;
     }
     
-    private ArrayList<Group> createGroups() {
-        ArrayList<Group> groups = new ArrayList<>();
-        ArrayList<Person> remainingVictims = new ArrayList<>(cm.getVictims());
+    private List<Group> createGroups() {
+        List<Group> groups = new ArrayList<>();
+        List<Person> remainingVictims = new ArrayList<>(cm.getVictims());
         Collections.shuffle(remainingVictims);
         
         for (int i = 0; i < cm.getNumberOfGroups(); i++) {
@@ -36,15 +37,15 @@ public class PrankGenerator {
         return groups;
     }
     
-    public ArrayList<Prank> generatePranks() {
-        ArrayList<Prank> pranks = new ArrayList<>();
-        ArrayList<Group> groups = createGroups();
-        ArrayList<Message> messages = cm.getMessages();
+    public List<Prank> generatePranks() {
+        List<Prank> pranks = new ArrayList<>();
+        List<Group> groups = createGroups();
+        List<Message> messages = cm.getMessages();
         
         for (Group group : groups) {
             group.shuffleMembers();
             Prank prank = new Prank(
-                    group.getMembers(),
+                    group,
                     messages.get(random.nextInt(messages.size())),
                     cm.getWitnessesToCC());
             pranks.add(prank);

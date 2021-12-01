@@ -3,6 +3,7 @@ package ch.heigvd.api.model.prank;
 import ch.heigvd.api.model.mail.Mail;
 import ch.heigvd.api.model.mail.Message;
 import ch.heigvd.api.model.mail.Person;
+import ch.heigvd.api.model.mail.Group;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,13 +15,14 @@ public class Prank {
     private final Person copy;
     private final Message message;
     
-    public Prank(List<Person> people, Message message, Person bcc) {
+    public Prank(Group people, Message message, Person bcc) {
         this.message = message;
+        this.people = people.getMembers();
         // 1er personne de la liste people: le sender
-        this.sender = people.get(0);
-        this.people = new ArrayList<>();
-        for (int i = 1; i < people.size(); i++) {
-            this.people.add(people.get(i));
+        this.sender = this.people.get(0);
+
+        for (int i = 1; i < this.people.size(); i++) {
+            this.people.add(this.people.get(i));
         }
         this.copy = bcc;
     }
