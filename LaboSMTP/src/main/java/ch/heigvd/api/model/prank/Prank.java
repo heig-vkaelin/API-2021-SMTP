@@ -17,12 +17,12 @@ public class Prank {
     
     public Prank(Group people, Message message, Person bcc) {
         this.message = message;
-        this.people = people.getMembers();
+        this.people = new ArrayList<>();
         // 1er personne de la liste people: le sender
-        this.sender = this.people.get(0);
+        this.sender =  people.getMembers().get(0);
 
-        for (int i = 1; i < this.people.size(); i++) {
-            this.people.add(this.people.get(i));
+        for (int i = 1; i < people.getMembers().size(); i++) {
+            this.people.add(people.getMembers().get(i));
         }
         this.copy = bcc;
     }

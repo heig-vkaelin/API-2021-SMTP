@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.List;
+
 import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -23,8 +25,8 @@ public class ConfigurationManager implements IConfigurationManager {
     private int numberOfGroups;
     private Person witnessesToCC;
     
-    private final ArrayList<Person> victims;
-    private final ArrayList<Message> messages;
+    private final List<Person> victims;
+    private final List<Message> messages;
     
     public ConfigurationManager() throws Exception {
         victims = loadVictims("./config/victims.utf8");
@@ -33,7 +35,7 @@ public class ConfigurationManager implements IConfigurationManager {
         verifyConfig();
     }
     
-    public ArrayList<Person> loadVictims(String filename) throws IOException {
+    public List<Person> loadVictims(String filename) throws IOException {
         ArrayList<Person> result = new ArrayList<>();
         try (BufferedReader reader =
                      new BufferedReader(
@@ -48,8 +50,8 @@ public class ConfigurationManager implements IConfigurationManager {
         return result;
     }
     
-    public ArrayList<Message> loadMessages(String filename) throws IOException {
-        ArrayList<Message> result = new ArrayList<>();
+    public List<Message> loadMessages(String filename) throws IOException {
+        List<Message> result = new ArrayList<>();
         try (BufferedReader reader =
                      new BufferedReader(
                              new InputStreamReader(
@@ -137,11 +139,11 @@ public class ConfigurationManager implements IConfigurationManager {
         return witnessesToCC;
     }
     
-    public ArrayList<Person> getVictims() {
+    public List<Person> getVictims() {
         return victims;
     }
     
-    public ArrayList<Message> getMessages() {
+    public List<Message> getMessages() {
         return messages;
     }
 }
