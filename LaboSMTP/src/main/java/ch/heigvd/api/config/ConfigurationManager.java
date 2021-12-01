@@ -70,7 +70,9 @@ public class ConfigurationManager implements IConfigurationManager {
                 }
             }
             // Création du dernier message
-            result.add(new Message(subject, content.toString()));
+            if (subject != null && subject.length() > 0 && content.length() > 0) {
+                result.add(new Message(subject, content.toString()));
+            }
         }
         return result;
     }
