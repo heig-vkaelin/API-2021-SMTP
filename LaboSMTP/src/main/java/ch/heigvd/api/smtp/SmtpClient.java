@@ -1,7 +1,6 @@
 package ch.heigvd.api.smtp;
 
 import ch.heigvd.api.model.mail.Mail;
-import ch.heigvd.api.model.mail.Message;
 
 import java.io.*;
 import java.net.Socket;
@@ -89,10 +88,11 @@ public class SmtpClient implements ISmtpClient {
         writer.flush();
         writer.write(mail.getContent() + EOL);
         sendLineVerified(".");
+        line = reader.readLine();
+        LOG.info(line);
         
         // QUIT
-        writer.write("QUIT" + EOL);
-        writer.flush();
+        sendLineVerified("QUIT");
         reader.close();
         writer.close();
         socket.close();
