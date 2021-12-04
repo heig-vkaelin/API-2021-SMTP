@@ -1,6 +1,6 @@
 package ch.heigvd.api.model.prank;
 
-import ch.heigvd.api.config.ConfigurationManager;
+import ch.heigvd.api.config.IConfigurationManager;
 import ch.heigvd.api.model.mail.Mail;
 import ch.heigvd.api.model.mail.Message;
 import ch.heigvd.api.model.mail.Person;
@@ -17,7 +17,7 @@ public class Prank {
     private final Message message;
     
     public Prank(Group people, Message message, Person bcc) {
-        if (people.getMembers().size() < ConfigurationManager.MIN_SIZE_GROUP) {
+        if (people.getMembers().size() < IConfigurationManager.MIN_SIZE_GROUP) {
             throw new RuntimeException("The group hasn't enough members to create " +
                     "a prank");
         }

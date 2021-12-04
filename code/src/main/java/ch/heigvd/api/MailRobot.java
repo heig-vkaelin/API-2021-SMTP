@@ -1,8 +1,10 @@
 package ch.heigvd.api;
 
 import ch.heigvd.api.config.ConfigurationManager;
+import ch.heigvd.api.config.IConfigurationManager;
 import ch.heigvd.api.model.prank.Prank;
 import ch.heigvd.api.model.prank.PrankGenerator;
+import ch.heigvd.api.smtp.ISmtpClient;
 import ch.heigvd.api.smtp.SmtpClient;
 
 import java.util.List;
@@ -14,7 +16,7 @@ public class MailRobot {
     public static void main(String[] args) {
         System.setProperty("java.util.logging.SimpleFormatter.format", "%4$s: %5$s%6$s%n");
         // Parsing config
-        ConfigurationManager cm;
+        IConfigurationManager cm;
         try {
             cm = new ConfigurationManager();
         } catch (Exception e) {
@@ -24,7 +26,7 @@ public class MailRobot {
         }
         
         // Generate pranks
-        SmtpClient client = new SmtpClient(cm.getSmtpServerAddress(), cm.getSmtpServerPort());
+        ISmtpClient client = new SmtpClient(cm.getSmtpServerAddress(), cm.getSmtpServerPort());
         PrankGenerator generator = new PrankGenerator(cm);
         List<Prank> pranks = generator.generatePranks();
         

@@ -1,6 +1,6 @@
 package ch.heigvd.api.model.prank;
 
-import ch.heigvd.api.config.ConfigurationManager;
+import ch.heigvd.api.config.IConfigurationManager;
 import ch.heigvd.api.model.mail.Group;
 import ch.heigvd.api.model.mail.Message;
 import ch.heigvd.api.model.mail.Person;
@@ -11,10 +11,10 @@ import java.util.List;
 import java.util.Random;
 
 public class PrankGenerator {
-    private final ConfigurationManager cm;
+    private final IConfigurationManager cm;
     private static final Random random = new Random();
     
-    public PrankGenerator(ConfigurationManager cm) {
+    public PrankGenerator(IConfigurationManager cm) {
         this.cm = cm;
     }
     
