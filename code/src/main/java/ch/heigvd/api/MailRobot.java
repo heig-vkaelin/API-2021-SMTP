@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 public class MailRobot {
-    private static final Logger LOG = Logger.getLogger(SmtpClient.class.getName());
+    private static final Logger LOG = Logger.getLogger(MailRobot.class.getName());
     
     public static void main(String[] args) {
         System.setProperty("java.util.logging.SimpleFormatter.format", "%4$s: %5$s%6$s%n");
