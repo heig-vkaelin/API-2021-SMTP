@@ -72,9 +72,19 @@ Un affichage vous expliquant le déroulé du programme sera affiché dans la con
 ## Implémentation
 
 TODO
-* **A description of your implementation**: document the key aspects of your code. It is probably a good idea to start with a class diagram. Decide which classes you want to show (focus on the important ones) and describe their responsibilities in text. It is also certainly a good idea to include examples of dialogues between your client and an SMTP server (maybe you also want to include some screenshots here).
+**A description of your implementation**: document the key aspects of your code. It is probably a good idea to start with a class diagram. Decide which classes you want to show (focus on the important ones) and describe their responsibilities in text. It is also certainly a good idea to include examples of dialogues between your client and an SMTP server (maybe you also want to include some screenshots here).
 
-### Dialogues client - serveur SMTP
+### Dialogues client - serveur SMTP
+
+Voici un diagramme présentant un exemple de communication entre le client (notre code Java et plus particulièrement notre classe SmtpClient et le serveur SMTP, MockMock dans notre cas).
+
+![SMTPCommunication](figures/SMTPCommunication.png)
+
+A chaque envoi du client, le serveur répondra avec le code 250 si tout se passe bien. La commande `RCPT TO` doit être réalisée pour chaque destinaire de l'e-mail ainsi que pour la personne qui recevra en copie cachée.
+
+Après avoir envoyé la commande DATA, le client reçoit du serveur la syntaxe à utiliser afin d'annoncer que l'envoi du contenu de son e-mail est terminé (un point entre deux retours à la ligne).
+
+Une fois l'envoi de l'email-terminé, le client peut annoncer au serveur qu'il souhaite quitter la communication via la commande QUIT et le serveur ferme la connexion.
 
 ### Exemples
 
