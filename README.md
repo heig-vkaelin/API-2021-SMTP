@@ -2,14 +2,14 @@
 Auteurs : Alexandre Jaquier, Valentin Kaelin
 
 ## Table des matières
-* [Description](#javaio)
+* [Description](#description)
 * [Installation](#installation)
 	* [Besoins techniques](#besoins-techniques)
 	* [Projet Java](#projet-java)
 	* [Serveur SMTP](#serveur-smtp)
 * [Configuration et exécution](#configuration-et-exécution)
 * [Implémentation](#implémentation)
-	* [Dialogues client - serveur SMTP](###dialogues-client---serveur-SMTP)
+	* [Dialogues client - serveur SMTP](#dialogues-client---serveur-smtp)
 	* [Exemples](#exemples)
 
 ## Description
