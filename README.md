@@ -1,6 +1,17 @@
 # Rapport Labo SMTP - API HEIG
 Auteurs : Alexandre Jaquier, Valentin Kaelin
 
+## Table des matières
+* [Description](#javaio)
+* [Installation](#installation)
+	* [Besoins techniques](#besoins-techniques)
+	* [Projet Java](#projet-java)
+	* [Serveur SMTP](#serveur-smtp)
+* [Configuration et exécution](#configuration-et-exécution)
+* [Implémentation](#implémentation)
+	* [Dialogues client - serveur SMTP](###dialogues-client---serveur-SMTP)
+	* [Exemples](#exemples)
+
 ## Description
 
 Ce répertoire GitHub contient la réalisation du laboratoire numéro 4 du cours API de l'HEIG. Ce laboratoire a pour but de mettre en pratique l'utilisation du protocole SMTP. Ce projet permet de créer des compagnes de "pranks". L'utilisateur peut définir une liste d'e-mails de victimes ainsi que les messages de farce à envoyer. Par la suite, le programme s'occupera de créer des groupes et enverra aléatoirement un des messages à chaque groupe.
@@ -71,20 +82,40 @@ Un affichage vous expliquant le déroulé du programme sera affiché dans la con
 
 ## Implémentation
 
-TODO
-**A description of your implementation**: document the key aspects of your code. It is probably a good idea to start with a class diagram. Decide which classes you want to show (focus on the important ones) and describe their responsibilities in text. It is also certainly a good idea to include examples of dialogues between your client and an SMTP server (maybe you also want to include some screenshots here).
+![UML](figures/UML.png)
+
+**Remarques générales**  
+Nous nous sommes avant tout basé sur l'implémentation exposée dans la vidéo de présentation du laboratoire afin d'avoir une architecture bien définie. Cela nous a permis de nous familiariser avec la notion d'interface, que nous n'avions pas encore vraiment utilisée.
+
+**Classe ConfigurationManager**  
+S'occupe de charger les fichiers de configuration disponibles à l'utilisateur exécutant l'application. C'est également cette classe qui va vérifier l'intégrité des données de configuration entrées.
+
+**Classe Personne**  
+Une personne est pour le moment représentée uniquement via son adresse e-mail. Nous l'avons tout de même implémenté comme une classe dans un souci d'évolutivité.
+
+**Classes Message et Mail**  
+Un message contient uniquement un sujet et un contenu. Un véritable mail avec en plus des destinataires, un envoyeur et une copie cachée est modélisé grâce à la classe Mail qui hérite de Message.
+
+**Classe PrankGenerator**  
+S'occupe de toute la logique de création de groupes ainsi que d'assigner une prank à chaque groupe. La création est faite de manière aléatoire parmi toute la liste de victimes de la configuration.
+
+**Classe Prank**  
+La classe prank permet de générer l'e-mail final que le client va envoyer au serveur. L'expéditeur est le premier membre du groupe de la prank. Ce choix est possible car les membres du groupe sont mélangés à la création de la prank.
+
+**Classe SmtpClient** 
+S'occupe de toute la connexion et de la communication avec le serveur SMTP. La classe vérifie notamment que le serveur retourne bien un code de succès après avoir reçu les différentes commandes du client.
 
 ### Dialogues client - serveur SMTP
 
-Voici un diagramme présentant un exemple de communication entre le client (notre code Java et plus particulièrement notre classe SmtpClient et le serveur SMTP, MockMock dans notre cas).
+Voici un diagramme présentant un exemple de communication entre le client (notre code Java et plus particulièrement notre classe SmtpClient) et le serveur SMTP (MockMock dans notre cas).
 
 ![SMTPCommunication](figures/SMTPCommunication.png)
 
-A chaque envoi du client, le serveur répondra avec le code 250 si tout se passe bien. La commande `RCPT TO` doit être réalisée pour chaque destinaire de l'e-mail ainsi que pour la personne qui recevra en copie cachée.
+À chaque envoi du client, le serveur répondra avec le code 250 si tout se passe bien. La commande `RCPT TO` doit être réalisée pour chaque destinataire de l'e-mail ainsi que pour la personne qui recevra en copie cachée.
 
 Après avoir envoyé la commande DATA, le client reçoit du serveur la syntaxe à utiliser afin d'annoncer que l'envoi du contenu de son e-mail est terminé (un point entre deux retours à la ligne).
 
-Une fois l'envoi de l'email-terminé, le client peut annoncer au serveur qu'il souhaite quitter la communication via la commande QUIT et le serveur ferme la connexion.
+Une fois l'envoi de l'email terminé, le client peut annoncer au serveur qu'il souhaite quitter la communication via la commande QUIT et le serveur ferme la connexion.
 
 ### Exemples
 
