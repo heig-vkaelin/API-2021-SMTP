@@ -1,5 +1,6 @@
 package ch.heigvd.api.model.prank;
 
+import ch.heigvd.api.config.ConfigurationManager;
 import ch.heigvd.api.model.mail.Mail;
 import ch.heigvd.api.model.mail.Message;
 import ch.heigvd.api.model.mail.Person;
@@ -16,11 +17,16 @@ public class Prank {
     private final Message message;
     
     public Prank(Group people, Message message, Person bcc) {
+        if (people.getMembers().size() < ConfigurationManager.MIN_SIZE_GROUP) {
+            throw new RuntimeException("The group hasn't enough members to create " +
+                    "a prank");
+        }
+        
         this.message = message;
         this.people = new ArrayList<>();
-        // 1er personne de la liste people: le sender
-        this.sender =  people.getMembers().get(0);
-
+        // 1ère personne de la liste people: le sender
+        this.sender = people.getMembers().get(0);
+        
         for (int i = 1; i < people.getMembers().size(); i++) {
             this.people.add(people.getMembers().get(i));
         }
@@ -28,12 +34,16 @@ public class Prank {
     }
     
     public Mail generateMail() {
-        Mail mail = new Mail(message.getSubject(), message.getContent());
+        List<String> to = people.stream()
+                .map(Person::getMailAddress)
+                .collect(Collectors.toList());
         
-        mail.setBcc(copy.getMailAddress());
-        mail.setFrom(sender.getMailAddress());
-        mail.setTo(people.stream().map(Person::getMailAddress).collect(Collectors.toList()));
-        
-        return mail;
+        return new Mail(
+                message.getSubject(),
+                message.getContent(),
+                sender.getMailAddress(),
+                to,
+                copy.getMailAddress()
+        );
     }
 }

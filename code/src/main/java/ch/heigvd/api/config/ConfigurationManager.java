@@ -15,7 +15,8 @@ import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class ConfigurationManager implements IConfigurationManager {
+public class ConfigurationManager {
+    public static int MIN_SIZE_GROUP = 3;
     // Regex récupérée sur https://stackoverflow.com/a/8204716/9188650
     public static final Pattern VALID_EMAIL_ADDRESS_REGEX =
             Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
@@ -35,7 +36,7 @@ public class ConfigurationManager implements IConfigurationManager {
         verifyConfig();
     }
     
-    public List<Person> loadVictims(String filename) throws IOException {
+    private List<Person> loadVictims(String filename) throws IOException {
         ArrayList<Person> result = new ArrayList<>();
         try (BufferedReader reader =
                      new BufferedReader(
@@ -50,7 +51,7 @@ public class ConfigurationManager implements IConfigurationManager {
         return result;
     }
     
-    public List<Message> loadMessages(String filename) throws IOException {
+    private List<Message> loadMessages(String filename) throws IOException {
         List<Message> result = new ArrayList<>();
         try (BufferedReader reader =
                      new BufferedReader(
@@ -79,7 +80,7 @@ public class ConfigurationManager implements IConfigurationManager {
         return result;
     }
     
-    public void loadProperties(String filename) throws IOException {
+    private void loadProperties(String filename) throws IOException {
         try (BufferedReader reader =
                      new BufferedReader(
                              new InputStreamReader(
@@ -100,8 +101,8 @@ public class ConfigurationManager implements IConfigurationManager {
         return matcher.find();
     }
     
-    public void verifyConfig() {
-        if (victims.size() < numberOfGroups * 3) {
+    private void verifyConfig() {
+        if (victims.size() < numberOfGroups * MIN_SIZE_GROUP) {
             throw new RuntimeException("The number of groups is too big compared " +
                     "to the number of victims.");
         }
