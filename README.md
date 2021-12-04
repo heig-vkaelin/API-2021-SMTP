@@ -28,7 +28,7 @@ java -jar LaboSMTP-1.0-SNAPSHOT.jar
 
 ### Serveur SMTP
 
-Afin de pouvoir tester l'application, il est possible de mettre en place un serveur SMTP local grâce à l'outil [MockMock](https://github.com/tweakers/MockMock). Ce serveur aura pour but de récupérer tous les mails envoyés et de les afficher de façon graphique grâce à une interface web.  
+Afin de pouvoir tester l'application, il est possible de mettre en place un serveur SMTP local grâce à l'outil [MockMock](https://github.com/tweakers/MockMock). Ce serveur aura pour but de récupérer tous les mails envoyés et de les afficher de manière graphique grâce à une interface web. De cette façon, il est facile de tester l'application sans envoyer des e-mails à de vraies personnes.  
 L'exécutable est déjà présent dans le dossier `docker`. Nous avons utilisé une [version modifiée](https://github.com/HEIGVD-Course-API/MockMock) du lociel afin de régler des soucis présents dans la version officielle.
 
 Afin de lancer le programme, il est nécessaire de lancer les scripts dans le dossier `docker`, dans cet ordre-ci:
@@ -73,3 +73,29 @@ Un affichage vous expliquant le déroulé du programme sera affiché dans la con
 
 TODO
 * **A description of your implementation**: document the key aspects of your code. It is probably a good idea to start with a class diagram. Decide which classes you want to show (focus on the important ones) and describe their responsibilities in text. It is also certainly a good idea to include examples of dialogues between your client and an SMTP server (maybe you also want to include some screenshots here).
+
+### Dialogues client - serveur SMTP
+
+### Exemples
+
+Les screenshots suivant montrent l'ordre des différentes étapes à réaliser afin de réussir à envoyer sa compagne de pranks.
+
+Build du conteneur docker, le premier peut prendre un peu de temps:
+![firstDockerBuild](figures/firstDockerBuild.png)
+
+Lancement du conteneur docker et affichage de ses logs:
+![containerRunning](figures/containerRunning.png)
+
+Build de l'application Java de création de pranks avec Maven:
+![mavenBuild](figures/mavenBuild.png)
+
+Lancement de l'application, les e-mails sont envoyés:
+![programOutput](figures/programOutput.png)
+
+Vérification que le serveur SMTP a bien reçu les e-mails dans ses logs:
+![smtpServerLogs](figures/smtpServerLogs.png)
+
+Affichage des e-mails reçus par le serveur SMTP sur l'interface web:
+![mockmockBrowser](figures/mockmockBrowser.png)
+
+Par la suite, il est possible de changer le champ `smtpServerAddress` du fichier de configuration `config.properties` par l'adresse d'un vrai serveur SMTP (ex: celui de l'école), afin d'envoyer véritablement les e-mails.
