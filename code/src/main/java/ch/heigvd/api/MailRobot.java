@@ -33,7 +33,7 @@ public class MailRobot {
         // Send pranks
         try {
             for (Prank p : pranks) {
-                client.sendMail(p.generateMail());
+                client.sendMail(p.generateMail(cm.getWitnessesToCC()));
             }
             LOG.info("Program finished.");
         } catch (Exception e) {

@@ -30,10 +30,15 @@ public class PrankGenerator {
         int turn = 0;
         while (remainingVictims.size() > 0) {
             int lastIndex = remainingVictims.size() - 1;
-            groups.get(turn).addMember(remainingVictims.get(lastIndex));
+            groups.get(turn).addReceiver(remainingVictims.get(lastIndex));
             remainingVictims.remove(lastIndex);
             turn = (turn + 1) % groups.size();
         }
+        
+        // Sélection des expéditeurs aléatoirement
+        for (Group g : groups)
+            g.setRandomSender();
+        
         return groups;
     }
     
@@ -43,11 +48,10 @@ public class PrankGenerator {
         List<Message> messages = cm.getMessages();
         
         for (Group group : groups) {
-            group.shuffleMembers();
             Prank prank = new Prank(
                     group,
-                    messages.get(random.nextInt(messages.size())),
-                    cm.getWitnessesToCC());
+                    messages.get(random.nextInt(messages.size()))
+            );
             pranks.add(prank);
         }
         return pranks;

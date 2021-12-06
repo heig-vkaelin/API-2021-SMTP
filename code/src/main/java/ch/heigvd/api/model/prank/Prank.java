@@ -11,34 +11,24 @@ import java.util.stream.Collectors;
 
 public class Prank {
     private final Group group;
-    private final Person copy;
     private final Message message;
     
-    public Prank(Group group, Message message, Person bcc) {
-        if (group.getMembers().size() < IConfigurationManager.MIN_SIZE_GROUP) {
-            throw new RuntimeException("The group hasn't enough members to create " +
-                    "a prank");
-        }
-        
+    public Prank(Group group, Message message) {
         this.group = group;
         this.message = message;
-        this.copy = bcc;
     }
     
-    public Mail generateMail() {
-        // 1ère personne de la liste: le sender
-        String sender = group.getMembers().get(0).getMailAddress();
-        List<String> to = group.getMembers().stream()
-                .skip(1)
+    public Mail generateMail(Person bcc) {
+        List<String> to = group.getReceivers().stream()
                 .map(Person::getMailAddress)
                 .collect(Collectors.toList());
         
         return new Mail(
                 message.getSubject(),
                 message.getContent(),
-                sender,
+                group.getSender().getMailAddress(),
                 to,
-                copy.getMailAddress()
+                bcc.getMailAddress()
         );
     }
 }
