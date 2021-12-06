@@ -120,11 +120,12 @@
       <attribute const="false" defaultValue="" isStatic="false" name="sender" type="Person" visibility="PRIVATE"/>
       <attribute const="false" defaultValue="" isStatic="false" name="copy" type="Person" visibility="PRIVATE"/>
       <method is-constructor="true" isAbstract="false" isStatic="false" name="Prank" returnType="" view="DEFAULT" visibility="PUBLIC">
-        <variable const="false" name="people" type="Group"/>
+        <variable const="false" name="group" type="Group"/>
         <variable const="false" name="message" type="Message"/>
+      </method>
+      <method isAbstract="false" isStatic="false" name="generateMail" returnType="Mail" view="DEFAULT" visibility="PUBLIC">
         <variable const="false" name="bcc" type="Person"/>
       </method>
-      <method isAbstract="false" isStatic="false" name="generateMail" returnType="Mail" view="DEFAULT" visibility="PUBLIC"/>
     </entity>
     <entity entityType="CLASS" id="12804" isAbstract="false" name="Person" visibility="PUBLIC">
       <attribute const="false" defaultValue="" isStatic="false" name="mailAddress" type="String" visibility="PRIVATE"/>
@@ -163,11 +164,14 @@
       <method is-constructor="true" isAbstract="false" isStatic="false" name="Group" returnType="" view="DEFAULT" visibility="PUBLIC">
         <variable const="false" name="members" type="List&lt;Person&gt;"/>
       </method>
-      <method isAbstract="false" isStatic="false" name="getMembers" returnType="List&lt;Person&gt;" view="DEFAULT" visibility="PUBLIC"/>
-      <method isAbstract="false" isStatic="false" name="addMember" returnType="void" view="DEFAULT" visibility="PUBLIC">
+      <method isAbstract="false" isStatic="false" name="getSender" returnType="Person" view="DEFAULT" visibility="PUBLIC"/>
+      <method isAbstract="false" isStatic="false" name="getReceivers" returnType="List&lt;Person&gt;" view="DEFAULT" visibility="PUBLIC">
         <variable const="false" name="member" type="Person"/>
       </method>
-      <method isAbstract="false" isStatic="false" name="shuffleMembers" returnType="void" view="DEFAULT" visibility="PUBLIC"/>
+      <method isAbstract="false" isStatic="false" name="addReceiver" returnType="void" view="DEFAULT" visibility="PUBLIC">
+        <variable const="false" name="receiver" type="Person"/>
+      </method>
+      <method isAbstract="false" isStatic="false" name="setRandomSender" returnType="void" view="DEFAULT" visibility="PUBLIC"/>
     </entity>
     <entity entityType="INTERFACE" id="16032" isAbstract="true" name="IConfigurationManager" visibility="PUBLIC">
       <attribute const="false" defaultValue="" isStatic="true" name="MIN_SIZE_GROUP" type="int" visibility="PUBLIC"/>
@@ -200,38 +204,38 @@
         <x>374</x>
         <y>159</y>
         <w>50</w>
-        <h>17</h>
+        <h>16</h>
       </labelAssociation>
       <roleAssociation>
         <x>335</x>
         <y>145</y>
         <w>0</w>
-        <h>17</h>
+        <h>16</h>
       </roleAssociation>
       <roleAssociation>
         <x>435</x>
         <y>145</y>
         <w>0</w>
-        <h>17</h>
+        <h>16</h>
       </roleAssociation>
       <multipliciteAssociation>
         <x>335</x>
         <y>118</y>
         <w>8</w>
-        <h>17</h>
+        <h>16</h>
       </multipliciteAssociation>
       <multipliciteAssociation>
         <x>457</x>
         <y>118</y>
         <w>7</w>
-        <h>17</h>
+        <h>16</h>
       </multipliciteAssociation>
     </relationView>
     <relationView color="-12566464" relationId="13817">
       <line>
         <point>
           <x>1621</x>
-          <y>231</y>
+          <y>246</y>
         </point>
         <point>
           <x>1621</x>
@@ -240,33 +244,33 @@
       </line>
       <labelAssociation>
         <x>1626</x>
-        <y>289</y>
+        <y>296</y>
         <w>86</w>
-        <h>17</h>
+        <h>16</h>
       </labelAssociation>
       <roleAssociation>
         <x>1625</x>
-        <y>209</y>
+        <y>224</y>
         <w>0</w>
-        <h>17</h>
+        <h>16</h>
       </roleAssociation>
       <roleAssociation>
         <x>1625</x>
         <y>345</y>
         <w>0</w>
-        <h>17</h>
+        <h>16</h>
       </roleAssociation>
       <multipliciteAssociation>
         <x>1591</x>
-        <y>238</y>
+        <y>253</y>
         <w>8</w>
-        <h>17</h>
+        <h>16</h>
       </multipliciteAssociation>
       <multipliciteAssociation>
         <x>1592</x>
         <y>317</y>
         <w>7</w>
-        <h>17</h>
+        <h>16</h>
       </multipliciteAssociation>
     </relationView>
     <relationView color="-12566464" relationId="13979">
@@ -284,31 +288,31 @@
         <x>1155</x>
         <y>253</y>
         <w>81</w>
-        <h>17</h>
+        <h>16</h>
       </labelAssociation>
       <roleAssociation>
         <x>1155</x>
         <y>258</y>
         <w>0</w>
-        <h>17</h>
+        <h>16</h>
       </roleAssociation>
       <roleAssociation>
         <x>1155</x>
         <y>220</y>
         <w>0</w>
-        <h>17</h>
+        <h>16</h>
       </roleAssociation>
       <multipliciteAssociation>
         <x>1137</x>
         <y>258</y>
         <w>8</w>
-        <h>17</h>
+        <h>16</h>
       </multipliciteAssociation>
       <multipliciteAssociation>
         <x>1135</x>
         <y>220</y>
         <w>7</w>
-        <h>17</h>
+        <h>16</h>
       </multipliciteAssociation>
     </relationView>
     <relationView color="-12566464" relationId="14040">
@@ -326,31 +330,31 @@
         <x>1365</x>
         <y>154</y>
         <w>99</w>
-        <h>17</h>
+        <h>16</h>
       </labelAssociation>
       <roleAssociation>
         <x>1335</x>
         <y>145</y>
         <w>0</w>
-        <h>17</h>
+        <h>16</h>
       </roleAssociation>
       <roleAssociation>
         <x>1495</x>
         <y>145</y>
         <w>0</w>
-        <h>17</h>
+        <h>16</h>
       </roleAssociation>
       <multipliciteAssociation>
         <x>1335</x>
         <y>118</y>
         <w>8</w>
-        <h>17</h>
+        <h>16</h>
       </multipliciteAssociation>
       <multipliciteAssociation>
         <x>1487</x>
         <y>118</y>
         <w>8</w>
-        <h>17</h>
+        <h>16</h>
       </multipliciteAssociation>
     </relationView>
     <relationView color="-12566464" relationId="16627">
@@ -409,8 +413,8 @@
       <geometry>
         <x>1500</x>
         <y>100</y>
-        <w>250</w>
-        <h>130</h>
+        <w>280</w>
+        <h>145</h>
       </geometry>
     </componentView>
     <componentView color="-2079" componentID="12802" displayAttributes="true" displayDefault="true" displayMethods="true">
