@@ -109,7 +109,7 @@ Une personne est pour le moment représentée uniquement via son adresse e-mail.
 **Classes Message et Mail**  
 Un message contient uniquement un sujet et un contenu. Un véritable mail possède aussi des destinataires, un expéditeur et une copie cachée. Ce dernier est modélisé grâce à la classe Mail qui hérite de Message.
 
-**Classe Groupe**
+**Classe Groupe**  
 Modélise plusieurs destinatires ainsi qu'un expéditeur. Il est possible d'assigner un expéditeur aléatoirement parmi la liste des destinaires entrés.
 
 **Classe PrankGenerator**  
@@ -117,7 +117,7 @@ S'occupe de toute la logique de création de groupes ainsi que d'assigner une pr
 **Classe Prank**  
 La classe prank permet de générer l'e-mail final que le client va envoyer au serveur.
 
-**Classe SmtpClient**
+**Classe SmtpClient**  
 S'occupe de toute la connexion et de la communication avec le serveur SMTP. La classe vérifie notamment que le serveur retourne bien un code de succès après avoir reçu les différentes commandes du client.
 
 ### Dialogues client - serveur SMTP
