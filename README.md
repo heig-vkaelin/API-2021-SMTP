@@ -1,16 +1,19 @@
 # Rapport Labo SMTP - API HEIG
+
 Auteurs : Alexandre Jaquier, Valentin Kaelin
 
 ## Table des matières
-* [Description](#description)
-* [Installation](#installation)
-	* [Besoins techniques](#besoins-techniques)
-	* [Projet Java](#projet-java)
-	* [Serveur SMTP](#serveur-smtp)
-* [Configuration et exécution](#configuration-et-exécution)
-* [Implémentation](#implémentation)
-	* [Dialogues client - serveur SMTP](#dialogues-client---serveur-smtp)
-	* [Exemples](#exemples)
+
+- [Description](#description)
+- [MockMock](#mockmock)
+- [Installation](#installation)
+  - [Besoins techniques](#besoins-techniques)
+  - [Projet Java](#projet-java)
+  - [Serveur SMTP](#serveur-smtp)
+- [Configuration et exécution](#configuration-et-exécution)
+- [Implémentation](#implémentation)
+  - [Dialogues client - serveur SMTP](#dialogues-client---serveur-smtp)
+  - [Exemples](#exemples)
 
 ## Description
 
@@ -18,14 +21,21 @@ Ce répertoire GitHub contient la réalisation du laboratoire numéro 4 du cours
 
 Il est également possible de tester l'envoi des e-mails sans embêter de vraies personnes en utilisant l'outil MockMock permettant de créer un serveur SMTP local. Une configuration docker est présente afin de faciliter son utilisation.
 
+## MockMock
+
+Afin de pouvoir tester l'application, il est possible de mettre en place un serveur SMTP local grâce à l'outil [MockMock](https://github.com/tweakers/MockMock).
+
+MockMock est un outil permettant de "mock" / simuler un vrai serveur SMTP. Ce serveur aura pour but de récupérer tous les mails envoyés depuis votre machine et de les afficher de manière graphique grâce à une interface web. De cette façon, il est facile de tester l'application sans envoyer des e-mails à de vraies personnes.
+
 ## Installation
 
 ### Besoins techniques
+
 La liste suivante doit être installée sur votre machine afin de pouvoir utiliser correctement ce projet:
 
-* Java avec >= jdk11
-* Maven
-* Docker
+- Java avec >= jdk11
+- Maven
+- Docker
 
 ### Projet Java
 
@@ -39,8 +49,7 @@ java -jar LaboSMTP-1.0-SNAPSHOT.jar
 
 ### Serveur SMTP
 
-Afin de pouvoir tester l'application, il est possible de mettre en place un serveur SMTP local grâce à l'outil [MockMock](https://github.com/tweakers/MockMock). Ce serveur aura pour but de récupérer tous les mails envoyés et de les afficher de manière graphique grâce à une interface web. De cette façon, il est facile de tester l'application sans envoyer des e-mails à de vraies personnes.  
-L'exécutable est déjà présent dans le dossier `docker`. Nous avons utilisé une [version modifiée](https://github.com/HEIGVD-Course-API/MockMock) du logiciel afin de régler des soucis présents dans la version officielle.
+L'exécutable de MockMock est déjà présent dans le dossier `docker`. Nous avons utilisé une [version modifiée](https://github.com/HEIGVD-Course-API/MockMock) du logiciel afin de régler des soucis présents dans la version officielle.
 
 Afin de lancer le programme, il est nécessaire de lancer les scripts dans le dossier `docker`, dans cet ordre-ci:
 
@@ -50,17 +59,19 @@ Afin de lancer le programme, il est nécessaire de lancer les scripts dans le do
 ```
 
 Une fois ces commandes effectuées, un conteneur docker contenant l'application MockMock tournera en fond sur votre ordinateur. Celle-ci contient deux points d'entrées:
-* Un serveur SMTP sur le port 25
-* L'interface web sur le port 8282
+
+- Un serveur SMTP sur le port 25
+- L'interface web sur le port 8282
 
 Il vous est donc possible d'accéder à l'interface en vous rendant sur la page suivante sur un navigateur: [localhost:8282](http://localhost:8282/). Elle devrait être vide pour le moment. Rendez-vous dans la section suivante afin d'apprendre à réaliser une campagne de pranks.
 
 ## Configuration et exécution
 
-Après avoir exécuté la commande ``mvn clean package``, il vous est possible de configurer votre campagne de pranks grâce aux fichiers se trouvant dans le dossier `target/config`. Voici le but des ces 3 fichiers:
+Après avoir exécuté la commande `mvn clean package`, il vous est possible de configurer votre campagne de pranks grâce aux fichiers se trouvant dans le dossier `target/config`. Voici le but de ces 3 fichiers:
 
-* **config.properties**: fichier de configuration principal, il vous est possible de changer l'adresse et le port du serveur SMTP (à laisser par défaut si vous utilisez MockMock), le nombre de groupes et l'adresse qui sera en copie câchée de chaque mail afin de surveiller que la campagne s'est bien déroulée. 
-* **messages.utf8**: fichier contenant les différents messages de pranks, il vous est possible d'en ajouter autant que vous le souhaitez. La syntaxe des messages est la suivante, les textes entre crochets sont à remplacer par votre contenu:
+- **config.properties**: fichier de configuration principal, il vous est possible de changer l'adresse et le port du serveur SMTP (à laisser par défaut si vous utilisez MockMock), le nombre de groupes et l'adresse qui sera en copie câchée de chaque mail afin de surveiller que la campagne s'est bien déroulée.
+- **messages.utf8**: fichier contenant les différents messages de pranks, il vous est possible d'en ajouter autant que vous le souhaitez. La syntaxe des messages est la suivante, les textes entre crochets sont à remplacer par votre contenu:
+
 ```java
 Subject: [SUJET ICI]
 
@@ -71,13 +82,15 @@ ETC]
 Subject: [SUJET ICI]
 ... // etc etc
 ```
-* **victims.utf8**: fichier contenant la liste des victimes à cibler, chaque ligne doit contenir une adresse e-mail valide. À noter que la taille de chaque groupe doit être de 3 au minimum. Il faut donc avoir un nombre de victimes suffisant comparé au nombre de groupes défini dans le fichier `config.properties`.
+
+- **victims.utf8**: fichier contenant la liste des victimes à cibler, chaque ligne doit contenir une adresse e-mail valide. À noter que la taille de chaque groupe doit être de 3 au minimum. Il faut donc avoir un nombre de victimes suffisant comparé au nombre de groupes défini dans le fichier `config.properties`.
 
 Après avoir fini votre configuration, il est possible d'exécuter l'application en se rendant dans le dossier `target` et en lançant la commande suivante:
 
 ```bash
 java -jar LaboSMTP-1.0-SNAPSHOT.jar
 ```
+
 Un affichage vous expliquant le déroulé du programme sera affiché dans la console et il vous sera possible d'aller vérifier le bon envoi des mails en retournant sur l'interface de MockMock sur le site [localhost:8282](http://localhost:8282/).
 
 ## Implémentation
@@ -94,15 +107,17 @@ S'occupe de charger les fichiers de configuration disponibles à l'utilisateur e
 Une personne est pour le moment représentée uniquement via son adresse e-mail. Nous l'avons tout de même implémentée comme une classe dans un souci d'évolutivité.
 
 **Classes Message et Mail**  
-Un message contient uniquement un sujet et un contenu. Un véritable mail possède aussi des destinataires, un expéditeur et une copie cachée. ce dernier est modélisé grâce à la classe Mail qui hérite de Message.
+Un message contient uniquement un sujet et un contenu. Un véritable mail possède aussi des destinataires, un expéditeur et une copie cachée. Ce dernier est modélisé grâce à la classe Mail qui hérite de Message.
+
+**Classe Groupe**
+Modélise plusieurs destinatires ainsi qu'un expéditeur. Il est possible d'assigner un expéditeur aléatoirement parmi la liste des destinaires entrés.
 
 **Classe PrankGenerator**  
 S'occupe de toute la logique de création de groupes ainsi que d'assigner une prank à chaque groupe. La création est faite de manière aléatoire parmi toute la liste de victimes de la configuration.
-
 **Classe Prank**  
-La classe prank permet de générer l'e-mail final que le client va envoyer au serveur. L'expéditeur est choisi aléatoirement parmi tous les membres du groupe lors de la création des groupes.
+La classe prank permet de générer l'e-mail final que le client va envoyer au serveur.
 
-**Classe SmtpClient** 
+**Classe SmtpClient**
 S'occupe de toute la connexion et de la communication avec le serveur SMTP. La classe vérifie notamment que le serveur retourne bien un code de succès après avoir reçu les différentes commandes du client.
 
 ### Dialogues client - serveur SMTP
