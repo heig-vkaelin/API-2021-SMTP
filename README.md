@@ -115,7 +115,7 @@ Modélise plusieurs destinatires ainsi qu'un expéditeur. Il est possible d'assi
 **Classe PrankGenerator**  
 S'occupe de toute la logique de création de groupes ainsi que d'assigner une prank à chaque groupe. La création est faite de manière aléatoire parmi toute la liste de victimes de la configuration.
 **Classe Prank**  
-La classe prank permet de générer l'e-mail final que le client va envoyer au serveur.
+La classe prank permet de générer l'e-mail final que le client va envoyer au serveur. L'e-mail est généré à partir du Message et est envoyé aux destinataires du groupe.
 
 **Classe SmtpClient**  
 S'occupe de toute la connexion et de la communication avec le serveur SMTP. La classe vérifie notamment que le serveur retourne bien un code de succès après avoir reçu les différentes commandes du client.
