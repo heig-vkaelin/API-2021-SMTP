@@ -77,7 +77,6 @@ public class SmtpClient implements ISmtpClient {
             writer.write(", " + mail.getTo().get(i));
         }
         writer.write(EOL);
-        writer.write("Bcc: " + mail.getBcc() + EOL);
         writer.write("Subject: =?utf-8?B?"
                 + Base64.getEncoder().encodeToString(mail.getSubject().getBytes())
                 + "?=" + EOL);
